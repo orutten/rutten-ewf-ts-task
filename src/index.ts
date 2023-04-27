@@ -44,27 +44,25 @@ function getRandomMovie() {
  */
 function findMovies(genres: Genre[]): Movie[] {
   const results: Movie[] = [];
-
   // group movies by percentage of matched genres
   const groupedMovies: Map<number, Movie[]> = new Map();
+  // sort movies by genre length in ascending order so we can exit the loop early
+  // when there are movies with more genres than being search
+  const sortedMovies: Movie[] = movies.sort((a, b) => a.genres.length - b.genres.length);
 
   // for every movie count the number of matched genres and calculate its score as a percent of genres that match
-  for (const movie of movies) {
-    const matchedGenres = movie.genres.filter((genre) => genres.includes(genre as Genre));
-    const percentMatch = Math.round((matchedGenres.length / genres.length) * 100);
+  for (const movie of sortedMovies) {
+    // const matchedGenres = movie.genres.filter((genre) => genres.includes(genre as Genre));
+    const matchedGenres = new Set(movie.genres.filter((genre) => genres.includes(genre as Genre)));
 
+    const percentMatch = Math.round((matchedGenres.size / genres.length) * 100);
     // ignore any movies that dont have any matching genres
     // ignore any movies that have more genres than the number of genres being searched
-    if (percentMatch > 0 && movie.genres.length <= genres.length) {
-
+    // ignore any movies where matched genres doesnt equal the number of genres the movie has
+    if (percentMatch > 0 && movie.genres.length <= genres.length && matchedGenres.size === movie.genres.length) {
       // check if we already have an entry in the groupedMovies Map with the number of matched genres
       if (!groupedMovies.has(percentMatch)) {
         groupedMovies.set(percentMatch, []);
-      }
-
-      // number of matching genres must be equal to the number genres the movie has
-      if (matchedGenres.length !== movie.genres.length) {
-        continue
       }
 
       // add the movie to the Map for the corresponding number of matched genres
@@ -76,11 +74,8 @@ function findMovies(genres: Genre[]): Movie[] {
   const sortedScores = Array.from(groupedMovies.keys()).sort((a, b) => b - a);
 
   // for each score group add the movies to the results array
-  for (let i = 0; i < sortedScores.length; i++) {
-    const movies = groupedMovies.get(sortedScores[i]) ?? [];
-    for (let i = 0; i < movies.length; i++) {
-      results.push(movies[i]);
-    }
+  for (const score of sortedScores) {
+    results.push(...groupedMovies.get(score) ?? []);
   }
 
   return results;
