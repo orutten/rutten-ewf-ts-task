@@ -1,32 +1,25 @@
-## Energy Web - JavaScript/TypeScript Developer recruitment task
+## Aat Rutten Energy Web recruitment task
 
-Hey there!
+This repo contains a solution to [this challenge](https://github.com/dwojno/ewf-ts-task).
 
-Not so long ago we decided create a catalogue of our favorite movies (./src/db.json) as json. It is hard to find things there, so we would like to build an algorithm to make it easier.
+### Assumptions 
+Since this is an algorithmic challenge it purely focuses on creating the most efficient matching algorithm. For this reason the following requirements have been ignored:
+* A beautiful responsive front end
+* Error handling
+* Configurability:
+  * Ability to specify different data sources
+  * Ability to specify matching / filtering rules
+* Pagination of results
 
-## Before start
-1. Please remove `.git` folder and initialize your own repository using this repository as a starting point
-2. Please install all dependencies using `npm i`
+### Time complexity
+The time complexity of the `getRandomMovie()` function is `O(1)` because generating a random number and accessing a single element in an array can be done in the same amount of time regardless of the size of the array.
 
+The time complexity of the `findMovies()` function can be broken down as follows:
+  * The loop that calculates number of matched genres if `O(n)` because it loops over every movie once.
+  * Adding movies to the `groupedMovies` map also has a time complexity of `O(n)` because it performs one operation for each movie.
+  * The sorting operation of the scores has a time complexity of `O(n log n)` in the worst case scenario where all movies have a different score and `O(1)` in the best case where all movies have the same score.
+  * The loop that adds movies to the `results` array has a time complexity of `O(n)` because it iterates over every score group and every move in the score group once.
 
-## TODO'S
-1. Write an algorithm that would help us find the right movie: 
-  * If we provide genres [Comedy, Fantasy, Crime] then the top hits should be movies that have all three of them, then there should be movies that have one of [Comedy, Fantasy], [Comedy, Crime], [Fantasy, Crime] and then those with Comedy only, Fantasy only and Crime only. Similarly applies when the requested array of genres is shorter.
-
-  * Of course we don't want to have duplicates.
-
-  * If we provide an empty list, then we should get a single random movie. (return type should be a array with single movie)
-
-2. The algorithm needs to as efficient as possible, so please also provide its complexity using "Big O" notation with some explanation how you've calculated it. 
-
-To make it easier we've also provided a set of tests to make sure your solution works as expected. You can find them in `./src/__tests__`. To run them just use:
-```bash
-npm t
-```
-
-### Rules
-* Please not use any outside library like `lodash` etc.
-* We require code in git repository
-* All tests needs to pass
+In the worst case the time complexity of the `findMovies()` function is dominated by sorting the scores `O(n log n)`. In the best case where all movies have the same score the time complexity is O(n).
 
 
