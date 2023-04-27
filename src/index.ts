@@ -6,14 +6,14 @@ const movies: Movie[] = moviesData as Movie[];
 
 export const getFilteredMovies = ({ genres }: { genres: Genre[] }): Movie[] => {
   if (genres.length === 0) {
-    return getRandomMovie()
+    return getRandomMovie();
   } else {
     return findMovies(genres);
   }
 }
 
 /**
- * Returns a random number between start and end
+ * Returns a random number between a given start and end
  * 
  * @param start Number
  * @param end Number
@@ -24,7 +24,7 @@ function generateRandomNumber(start: number, end: number): number {
 }
 
 /**
- * Returns a movie at random from an array
+ * Returns a movie at a random index from the movies data
  * 
  * @returns Movie
  */
